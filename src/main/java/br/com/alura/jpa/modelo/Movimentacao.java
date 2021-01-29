@@ -6,19 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+
+@NamedQuery(name = "mediaDiariaMovimentacoes", query = "select new br.com.alura.jpa.modelo.MediaComData(avg(m.valor), day(m.data), month(m.data)) from Movimentacao m group by day(m.data), month(m.data), year(m.data)")
 
 @Entity
 public class Movimentacao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private TipoMovimentacao tipoMovimentacao;
 	private LocalDateTime data;
 	private String descricao;
@@ -27,7 +31,7 @@ public class Movimentacao {
 	private Conta conta;
 	@OneToMany
 	private List<Categoria> categorias = new ArrayList<>();
-	
+
 	public List<Categoria> getCategorias() {
 		return categorias;
 	}
@@ -83,5 +87,4 @@ public class Movimentacao {
 	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
-
 }
